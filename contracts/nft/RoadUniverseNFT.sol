@@ -7,6 +7,7 @@ import '@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol';
 import '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
 
 contract RoadUniverseNFT is ERC721AUpgradeable, OwnableUpgradeable,UUPSUpgradeable {
+    string private _uri;
     // Take note of the initializer modifiers.
     // - initializerERC721A for ERC721AUpgradeable.
     // - initializer for OpenZeppelin's OwnableUpgradeable.
@@ -24,8 +25,11 @@ contract RoadUniverseNFT is ERC721AUpgradeable, OwnableUpgradeable,UUPSUpgradeab
     // _authorizeUpgrade: required
     function _authorizeUpgrade(address) internal override onlyOwner {}
 
-    function tokenURI(uint256 tokenId) public pure override returns (string memory) {
-        return string(abi.encodePacked("https://api.example.com/metadata/erc721/", uint2str(tokenId)));
+    function setURI(string memory uri) public onlyOwner {
+        _uri = uri;
+    }
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+        return string(abi.encodePacked(_uri, uint2str(tokenId)));
     }
 
     // uint 转 string 的辅助函数
